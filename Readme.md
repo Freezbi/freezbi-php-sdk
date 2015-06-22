@@ -29,12 +29,12 @@ Step 1 - Add the Freezbi SDK as a dependency in your composer.json file as follo
 
     "require": {
         ...
-        "freezbi/php-sdk": "dev-master"
+        "freezbi/freezbi-php-sdk": "dev-master"
     },
 
 Step 2 - Update your dependencies with Composer
 
-    you@yourhost:/path/to/project$ php composer.phar update freezbi/php-sdk
+    you@yourhost:/path/to/project$ php composer.phar update freezbi/freezbi-php-sdk
 
 The Library has been added into your dependencies and ready to be used.
 
@@ -46,7 +46,7 @@ Freezbi SDK is distributed under MIT license, see LICENSE file.
 Contacts
 -------------------------------------------------
 Report bugs or suggest features using
-[issue tracker at GitHub](https://github.com/freezbi/php-sdk).
+[issue tracker at GitHub](https://github.com/freezbi/freezbi-php-sdk).
 
 
 Examples
