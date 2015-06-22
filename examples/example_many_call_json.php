@@ -9,7 +9,7 @@ $freezbiApi->TemporaryFolder = './temp/';
 
 // Create a new Notification with its name, url, and body type
 $notification = new \Freezbi\Notification\ManyStreamNotification('youtube');
-$notification->Url = 'https://www.googleapis.com/youtube/v3/search?channelId={channel}&part=snippet&order=date&maxResults=1&key=AIzaSyDmEA3xpEYdQ6XGzwlwvzTwGXL-wVOtcQQ';
+$notification->Url = 'https://www.googleapis.com/youtube/v3/search?channelId={channel}&part=snippet&order=date&maxResults=1';
 $notification->Format = 'json';
 
 // Prepare the api for that ManyStreamNotification
