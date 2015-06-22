@@ -11,7 +11,7 @@ class ManyStreamNotification extends Notification {
     public $Urls;
 
 
-    public function __construct($name = null, $url = null, $format = 'json') {
+    public function __construct($name = null, $url = null, $format = 'html') {
         $this->Name = $name;
         $this->Url = $url;
         $this->Format = strtolower($format);
