@@ -1,0 +1,15 @@
+{
+    "name": "freezbi/php-sdk-v1",
+    "description": "SDK PHP for Freezbi api V1",
+    "minimum-stability": "stable",
+    "license": "MIT",
+    "require": {
+        "php": ">=5.3.0",
+        "ext-curl": "*",
+        "ext-openssl": "*"
+    },    
+    "autoload": {
+        "psr-4": { "Freezbi\\": "" },
+        "files": ["Freezbi/Autoloader.php"]
+    }
+}
