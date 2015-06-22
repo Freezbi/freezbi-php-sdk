@@ -1,5 +1,5 @@
 {
-    "name": "freezbi/php-sdk",
+    "name": "freezbi/freezbi-php-sdk",
     "description": "SDK PHP for Freezbi Notification System",
     "minimum-stability": "stable",
     "license": "MIT",
