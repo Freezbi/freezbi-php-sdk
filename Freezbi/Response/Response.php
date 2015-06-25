@@ -12,13 +12,15 @@ class Response
     public $Data;
 
 
-    public function __construct($title = null, $message = null, $data = null) {
+    public function __construct($title = null, $message = null, $data = null)
+    {
         $this->Title = $title;
         $this->Message = $message;
         $this->Data = $data;
     }
 
-    public function render() {
+    public function render()
+    {
         $output = array('result' => $this->SendNotification);
 
         if (!empty($this->Title) && $this->Title != null) {
@@ -37,8 +39,8 @@ class Response
     }
 
 
-    public function renderJson() {
+    public function renderJson()
+    {
         return json_encode($this->render());
     }
-
 }

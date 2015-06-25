@@ -1,5 +1,6 @@
 <?php
 namespace Freezbi;
+
 include './Freezbi/Libraries/phpQuery/phpQuery.php';
 include './Freezbi/Autoloader.php';
 
@@ -11,8 +12,8 @@ use \Freezbi\Notification\ManyStreamNotification;
  * Freezbi API main entry point.
  * Provides managers to develop a response payload
  */
-class FreezbiApi {
-
+class FreezbiApi
+{
     public $Notification;
 
     public $Delay = 0;
@@ -25,12 +26,13 @@ class FreezbiApi {
 
     public $RemainingTime;
 
-    public function __construct() {
-
+    public function __construct()
+    {
     }
 
 
-    public function prepare($notification) {
+    public function prepare($notification)
+    {
 
         // Init configuration variables
         $this->Notification = $notification;
@@ -39,22 +41,23 @@ class FreezbiApi {
 
         // Prepare notification folder
         if (!is_dir($this->NotificationFolder)) {
-            mkdir($this->NotificationFolder,0777,true);
+            mkdir($this->NotificationFolder, 0777, true);
         }
 
         // Create/Read log file
         $logFilePath = $this->NotificationFolder.'/logfile';
         $readtype =  !file_exists($logFilePath) ? 'w+' : 'a+';
-        $this->LogFile = @fopen($logFilePath,$readtype);
-        $this->log("##################### START ####################","\n\n");
+        $this->LogFile = @fopen($logFilePath, $readtype);
+        $this->log("##################### START ####################", "\n\n");
     }
 
 
-    public function execute() {
+    public function execute()
+    {
 
         // If the delay isn't elapsed, return a dummy false response
         if (!$this->delayExecutionExpired($this->Delay)) {
-            $this->log("> Delay isn't over yet : ".$this->RemainingTime."s left","\n");
+            $this->log("> Delay isn't over yet : ".$this->RemainingTime."s left", "\n");
             $response = new Response();
             return $response->renderJson();
         }
@@ -64,7 +67,7 @@ class FreezbiApi {
         if ($this->Notification instanceof ManyStreamNotification) {
             $renders = array();
 
-            foreach($this->Notification->Configurations as $pid => $configuration) {
+            foreach ($this->Notification->Configurations as $pid => $configuration) {
                 $content = $this->Notification->execute($pid);
                 $response = $this->Notification->Action->__invoke($pid, $configuration, $content);
 
@@ -97,13 +100,14 @@ class FreezbiApi {
     }
 
 
-    public function delayExecutionExpired($seconds) {
+    public function delayExecutionExpired($seconds)
+    {
         $nowTimestamp = (int) time();
         $lastcheckTimestamp = 0;
         $lastCheckPath = $this->NotificationFolder.'/lastcheck';
 
         if (!file_exists($lastCheckPath)) {
-            file_put_contents($lastCheckPath,'0');
+            file_put_contents($lastCheckPath, '0');
         } else {
             $lastcheckTimestamp = (int) file_get_contents($lastCheckPath);
         }
@@ -119,7 +123,8 @@ class FreezbiApi {
     }
 
 
-    public function testSameAsBefore($keystring, $options = array()) {
+    public function testSameAsBefore($keystring, $options = array())
+    {
         $keystringHash = md5($keystring);
         $same = false;
 
@@ -154,7 +159,7 @@ class FreezbiApi {
 
             $oldKeystringHash = file_get_contents($filePath);
             $same = $oldKeystringHash == $keystringHash;
-            $this->log($keystring." => now state => ". $oldKeystringHash,"\n> ");
+            $this->log($keystring." => now state => ". $oldKeystringHash, "\n> ");
 
             if (!$same) {
                 file_put_contents($filePath, $keystringHash);
@@ -165,12 +170,14 @@ class FreezbiApi {
     }
 
 
-    public function initPhpQueryOn($html) {
+    public function initPhpQueryOn($html)
+    {
         \phpQuery::newDocumentHTML($html);
     }
 
 
-    public function log($string, $prefix = '') {
+    public function log($string, $prefix = '')
+    {
         $date = new \DateTime();
         $prefix = sprintf("%s[%s] ", $prefix, $date->format('Y-m-d H:i:s'));
         $putString = $prefix.$string."\n";
@@ -178,12 +185,8 @@ class FreezbiApi {
     }
 
 
-    public function closeLog() {
+    public function closeLog()
+    {
         fclose($this->LogFile);
     }
 }
-
-
-
-
-	

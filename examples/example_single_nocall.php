@@ -14,7 +14,7 @@ $notification = new \Freezbi\Notification\SingleStreamNotification('freezbiblog'
 // Prepare the api for that SingleStreamNotification
 $freezbiApi->prepare($notification);
 
-$notification->Action = function() use ($freezbiApi) {
+$notification->Action = function () use ($freezbiApi) {
 
     // Prepare a response
     $response = new Response();

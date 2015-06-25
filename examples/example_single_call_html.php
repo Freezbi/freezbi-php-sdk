@@ -14,7 +14,7 @@ $notification = new \Freezbi\Notification\SingleStreamNotification('freezbiblog'
 // Prepare the api for that SingleStreamNotification
 $freezbiApi->prepare($notification);
 
-$notification->Action = function($content) use ($freezbiApi) {
+$notification->Action = function ($content) use ($freezbiApi) {
     // Prepare a response
     $response = new Response();
 
@@ -25,7 +25,7 @@ $notification->Action = function($content) use ($freezbiApi) {
     // Extract a title and a link
     $data = $article->find('a')->attr('href');
     $title = trim($article->find('h1')->text());
-    $title = trim(preg_replace("#(.+)\n(.+)#","$1",$title));
+    $title = trim(preg_replace("#(.+)\n(.+)#", "$1", $title));
 
     // Check if the title is same as the previous call
     if (!empty($title) && !$freezbiApi->testSameAsBefore($title, array('keep_history' => true))) { // keep_history option store data history instead of "switch A<=>B" verification

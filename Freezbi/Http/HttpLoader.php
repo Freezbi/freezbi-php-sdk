@@ -3,7 +3,6 @@ namespace Freezbi\Http;
 
 class HttpLoader
 {
-
     public static $UserAgents = array(
         "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6",
         "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)",
@@ -16,18 +15,20 @@ class HttpLoader
     );
 
 
-    public static function getRandomUserAgent() {
+    public static function getRandomUserAgent()
+    {
         $random = rand(0, count(self::$UserAgents) - 1);
         return self::$UserAgents[$random];
     }
 
 
-    public static function get($url, $randomAgents = true) {
+    public static function get($url, $randomAgents = true)
+    {
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_MAXREDIRS, 2); //only 2 redirects
 
         //  curl_setopt($ch,CURLOPT_HEADER, false);
@@ -44,5 +45,4 @@ class HttpLoader
 
         return $output;
     }
-
 }

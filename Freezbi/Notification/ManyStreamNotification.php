@@ -3,27 +3,27 @@ namespace Freezbi\Notification;
 
 use \Freezbi\Http\HttpLoader;
 
-class ManyStreamNotification extends Notification {
-
-
+class ManyStreamNotification extends Notification
+{
     public $Configurations;
 
     public $Urls;
 
 
-    public function __construct($name = null, $url = null, $format = 'html') {
+    public function __construct($name = null, $url = null, $format = 'html')
+    {
         $this->Name = $name;
         $this->Url = $url;
         $this->Format = strtolower($format);
         $this->Urls = array();
 
-        foreach($_POST as $pid => $configuration) {
+        foreach ($_POST as $pid => $configuration) {
             $this->Configurations[$pid] = (array) json_decode($configuration);
         }
-
     }
 
-    public function execute($pid) {
+    public function execute($pid)
+    {
         $url = null;
 
         if (isset($this->Urls[$pid])) {
@@ -41,8 +41,4 @@ class ManyStreamNotification extends Notification {
 
         return $content;
     }
-
-
-
-
 }

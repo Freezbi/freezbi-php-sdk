@@ -3,17 +3,17 @@ namespace Freezbi\Notification;
 
 use \Freezbi\Http\HttpLoader;
 
-class SingleStreamNotification extends Notification {
-
-
-
-    public function __construct($name = null, $url = null, $format = 'html') {
+class SingleStreamNotification extends Notification
+{
+    public function __construct($name = null, $url = null, $format = 'html')
+    {
         $this->Name = $name;
         $this->Url = $url;
         $this->Format = strtolower($format);
     }
 
-    public function execute() {
+    public function execute()
+    {
         if ($this->Url == null) {
             return null;
         }
@@ -28,8 +28,4 @@ class SingleStreamNotification extends Notification {
 
         return $content;
     }
-
-
-
-
 }

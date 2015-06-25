@@ -16,13 +16,13 @@ $notification->Format = 'json';
 $freezbiApi->prepare($notification);
 
 // Update fetch urls for each configurations
-foreach($notification->Configurations as $identifier => $configuration) {
-    $customUrl = str_replace('{channel}',$configuration['channel'],$notification->Url);
+foreach ($notification->Configurations as $identifier => $configuration) {
+    $customUrl = str_replace('{channel}', $configuration['channel'], $notification->Url);
     $notification->Urls[$identifier] = $customUrl;
 }
 
 // Result processing
-$notification->Action = function($identifier, $configuration, $jsonContent) use ($freezbiApi) {
+$notification->Action = function ($identifier, $configuration, $jsonContent) use ($freezbiApi) {
     // Prepare a response
     $response = new Response();
 

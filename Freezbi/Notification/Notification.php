@@ -1,8 +1,8 @@
 <?php
 namespace Freezbi\Notification;
 
-abstract class Notification {
-
+abstract class Notification
+{
     public $Name;
 
     public $Url;
@@ -13,9 +13,8 @@ abstract class Notification {
 
     public $RandomAgents = true;
 
-    public function execute() {
+    public function execute()
+    {
         throw new \RuntimeException('You must implement an \'execute\' method for that Notification implementation.');
     }
-
-
 }
