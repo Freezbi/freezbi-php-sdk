@@ -19,6 +19,7 @@ class ManyStreamNotification extends Notification
         $this->Format = strtolower($format);
         $this->Urls = array();
         $this->Delays = array();
+        $this->Configurations = array();
 
         foreach ($_POST as $pid => $configuration) {
             $this->Configurations[$pid] = (array) json_decode($configuration);
