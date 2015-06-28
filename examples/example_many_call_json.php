@@ -7,8 +7,8 @@ use Freezbi\Response\Response;
 $freezbiApi = new Freezbi\FreezbiApi();
 $freezbiApi->TemporaryFolder = './temp/';
 
-// Create a new Notification with its name, url, and body type
-$notification = new \Freezbi\Notification\ManyStreamNotification('youtube');
+// Create a new Notification with its name, posted data (many only), url, and body type
+$notification = new \Freezbi\Notification\ManyStreamNotification('youtube', $_POST);
 $notification->Url = 'https://www.googleapis.com/youtube/v3/search?channelId={channel}&part=snippet&order=date&maxResults=1';
 $notification->Format = 'json';
 
