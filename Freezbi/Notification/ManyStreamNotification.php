@@ -12,7 +12,7 @@ class ManyStreamNotification extends Notification
     public $Delays;
 
 
-    public function __construct($name = null, $url = null, $format = 'html')
+    public function __construct($name = null, $post = array(), $url = null, $format = 'html')
     {
         $this->Name = $name;
         $this->Url = $url;
@@ -21,7 +21,8 @@ class ManyStreamNotification extends Notification
         $this->Delays = array();
         $this->Configurations = array();
 
-        foreach ($_POST as $pid => $configuration) {
+		
+        foreach ($post as $pid => $configuration) {
             $this->Configurations[$pid] = (array) json_decode($configuration);
         }
     }
