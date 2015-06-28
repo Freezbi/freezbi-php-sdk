@@ -1,8 +1,8 @@
 <?php
 namespace Freezbi;
 
-include './Freezbi/Libraries/phpQuery/phpQuery.php';
-include './Freezbi/Autoloader.php';
+include dirname(__FILE__).'/Libraries/phpQuery/phpQuery.php';
+include dirname(__FILE__).'/Autoloader.php';
 
 use \Freezbi\Util\StringTools;
 use \Freezbi\Response\Response;
@@ -48,7 +48,6 @@ class FreezbiApi
         $logFilePath = $this->NotificationFolder.'/logfile';
         $readtype =  !file_exists($logFilePath) ? 'w+' : 'a+';
         $this->LogFile = @fopen($logFilePath, $readtype);
-        $this->log("##################### START ####################", "\n\n");
     }
 
 
@@ -62,14 +61,20 @@ class FreezbiApi
             return $response->renderJson();
         }
 
+        $this->log("##################### START ####################", "\n\n");
 
         // Many stream case
         if ($this->Notification instanceof ManyStreamNotification) {
             $renders = array();
 
             foreach ($this->Notification->Configurations as $pid => $configuration) {
-                $content = $this->Notification->execute($pid);
-                $response = $this->Notification->Action->__invoke($pid, $configuration, $content);
+
+                if (!$this->delayExecutionExpired($this->Notification->Delays[$pid],$pid)) {
+                    $response = new Response();
+                } else {
+                    $content = $this->Notification->execute($pid);
+                    $response = $this->Notification->Action->__invoke($pid, $configuration, $content);
+                }
 
                 if (!$response instanceof Response) {
                     throw new \InvalidArgumentException('Callback must return a Freezbi\\Response object.');
@@ -100,11 +105,17 @@ class FreezbiApi
     }
 
 
-    public function delayExecutionExpired($seconds)
+    public function delayExecutionExpired($seconds, $pid = '')
     {
         $nowTimestamp = (int) time();
         $lastcheckTimestamp = 0;
-        $lastCheckPath = $this->NotificationFolder.'/lastcheck';
+        $lastCheckPath = $pid != '' ? $this->NotificationFolder.'/'.$pid.'/lastcheck' : $this->NotificationFolder.'/lastcheck';
+
+        if ($pid != '') {
+            if (!is_dir(dirname($lastCheckPath))) {
+                mkdir(dirname($lastCheckPath),0777,true);
+            }
+        }
 
         if (!file_exists($lastCheckPath)) {
             file_put_contents($lastCheckPath, '0');
@@ -121,6 +132,8 @@ class FreezbiApi
 
         return false;
     }
+
+
 
 
     public function testSameAsBefore($keystring, $options = array())

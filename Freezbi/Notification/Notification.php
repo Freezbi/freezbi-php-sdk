@@ -13,8 +13,5 @@ abstract class Notification
 
     public $RandomAgents = true;
 
-    public function execute()
-    {
-        throw new \RuntimeException('You must implement an \'execute\' method for that Notification implementation.');
-    }
+ 
 }
