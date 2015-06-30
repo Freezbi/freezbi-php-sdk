@@ -5,6 +5,8 @@ include dirname(__FILE__).'/Libraries/phpQuery/phpQuery.php';
 include dirname(__FILE__).'/Autoloader.php';
 
 use \Freezbi\Util\StringTools;
+use \Freezbi\Util\ExecutionTime;
+use \Freezbi\Util\ExecutionDate;
 use \Freezbi\Response\Response;
 use \Freezbi\Notification\ManyStreamNotification;
 
@@ -105,9 +107,10 @@ class FreezbiApi
     }
 
 
-    public function delayExecutionExpired($seconds, $pid = '')
+    public function delayExecutionExpired($time, $pid = '')
     {
-        $nowTimestamp = (int) time();
+        $now = new \DateTime();
+        $nowTimestamp = (int) $now->format('U');
         $lastcheckTimestamp = 0;
         $lastCheckPath = $pid != '' ? $this->NotificationFolder.'/'.$pid.'/lastcheck' : $this->NotificationFolder.'/lastcheck';
 
@@ -124,8 +127,25 @@ class FreezbiApi
         }
 
         $this->RemainingTime = $nowTimestamp - $lastcheckTimestamp;
-        
-        if ($this->RemainingTime >= $seconds) {
+
+        if (is_array($time)) {
+            foreach($time as $executionPeriod) {
+                if ($executionPeriod->validRange($now)) {
+                    file_put_contents($lastCheckPath, $nowTimestamp);
+                    return true;
+                }
+            }
+        } else if ($time instanceof ExecutionTime) {
+            if ($time->validRange($now)) {
+                file_put_contents($lastCheckPath, $nowTimestamp);
+                return true;
+            }
+        } else if ($time instanceof ExecutionDate) {
+            if ($time->validRange($now)) {
+                file_put_contents($lastCheckPath, $nowTimestamp);
+                return true;
+            }
+        } else if ($this->RemainingTime >= $time) {
             file_put_contents($lastCheckPath, $nowTimestamp);
             return true;
         }
