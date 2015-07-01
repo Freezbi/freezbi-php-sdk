@@ -71,7 +71,7 @@ class FreezbiApi
 
             foreach ($this->Notification->Configurations as $pid => $configuration) {
 
-                if (!$this->delayExecutionExpired($this->Notification->Delays[$pid],$pid)) {
+                if (isset($this->Notification->Delays[$pid]) && !$this->delayExecutionExpired($this->Notification->Delays[$pid],$pid)) {
                     $response = new Response();
                 } else {
                     $content = $this->Notification->execute($pid);
@@ -142,6 +142,11 @@ class FreezbiApi
             }
         } else if ($time instanceof ExecutionDate) {
             if ($time->validRange($now)) {
+                file_put_contents($lastCheckPath, $nowTimestamp);
+                return true;
+            }
+        } else if ($time instanceof ExecutionInterval) {
+            if ($time->validRange($this->RemainingTime)) {
                 file_put_contents($lastCheckPath, $nowTimestamp);
                 return true;
             }
