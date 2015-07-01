@@ -68,14 +68,15 @@ class FreezbiApi
         // Many stream case
         if ($this->Notification instanceof ManyStreamNotification) {
             $renders = array();
+            $content = $this->Notification->Multiple ? '' : $this->Notification->execute();
 
             foreach ($this->Notification->Configurations as $pid => $configuration) {
 
                 if (isset($this->Notification->Delays[$pid]) && !$this->delayExecutionExpired($this->Notification->Delays[$pid],$pid)) {
                     $response = new Response();
                 } else {
-                    $content = $this->Notification->execute($pid);
-                    $response = $this->Notification->Action->__invoke($pid, $configuration, $content);
+                    $inputContent = $this->Notification->Multiple ? $this->Notification->execute($pid) : $content;
+                    $response = $this->Notification->Action->__invoke($pid, $configuration, $inputContent);
                 }
 
                 if (!$response instanceof Response) {
@@ -89,7 +90,6 @@ class FreezbiApi
             return json_encode($renders);
         }
 
-        // Single stream case
 
         // Get remote url data
         $content = $this->Notification->execute();

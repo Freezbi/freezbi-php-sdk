@@ -11,11 +11,13 @@ class ManyStreamNotification extends Notification
 
     public $Delays;
 
+    public $Multiple;
 
     public function __construct($name = null, $post = array(), $url = null, $format = 'html')
     {
         $this->Name = $name;
         $this->Url = $url;
+        $this->Multiple = true;
         $this->Format = strtolower($format);
         $this->Urls = array();
         $this->Delays = array();
@@ -27,12 +29,16 @@ class ManyStreamNotification extends Notification
         }
     }
 
-    public function execute($pid)
+    public function execute($pid = null)
     {
         $url = null;
 
-        if (isset($this->Urls[$pid])) {
-            $url = $this->Urls[$pid];
+        if ($pid != null) {
+            if (isset($this->Urls[$pid])) {
+                $url = $this->Urls[$pid];
+            }
+        } else {
+            $url = $this->Url;
         }
 
 
@@ -46,4 +52,7 @@ class ManyStreamNotification extends Notification
 
         return $content;
     }
+
+
+
 }
