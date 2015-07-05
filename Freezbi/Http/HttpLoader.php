@@ -24,6 +24,8 @@ class HttpLoader
 
     public static function get($url, $randomAgents = true)
     {
+        if ($url == null || $url == 'null' || $url == '') return '';
+
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -40,7 +42,7 @@ class HttpLoader
         curl_close($ch);
 
         if ($output === false) {
-            throw new HttpGetException('Error %s: %s', curl_errno($ch), curl_error($ch));
+            throw new HttpGetException('Error %s: %s', ($ch), ($ch));
         }
 
         return $output;
