@@ -41,10 +41,6 @@ class HttpLoader
         $output = curl_exec($ch);
         curl_close($ch);
 
-        if ($output === false) {
-            throw new HttpGetException('Error %s: %s', ($ch), ($ch));
-        }
-
         return $output;
     }
 }
