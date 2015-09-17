@@ -18,7 +18,7 @@ class ResponseList extends Response
 				throw new \InvalidArgumentException('Message of ResponseList must be an array');
 			}
 			
-            $output['message'] = json_encode($this->Message);
+            $output['message'] = json_encode($this->Message, JSON_UNESCAPED_UNICODE);
         }
 
         if (!empty($this->Data) && $this->Data != null) {
