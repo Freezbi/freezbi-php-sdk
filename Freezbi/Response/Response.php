@@ -11,6 +11,8 @@ class Response
 
     public $Data;
 
+    public $isList = false;
+
 
     public function __construct($title = null, $message = null, $data = null)
     {
@@ -21,7 +23,7 @@ class Response
 
     public function render()
     {
-        $output = array('result' => $this->SendNotification);
+        $output = array('result' => $this->SendNotification, 'list' => $this->isList);
 
         if (!empty($this->Title) && $this->Title != null) {
             $output['title'] = $this->Title;
