@@ -158,16 +158,36 @@ class FreezbiApi
         return false;
     }
 
+    /*
+     * Return the DateTime of the last time you checked the notification
+     *
+     * @param (string) $pid = the pid of the task if there is not => ''
+     * @return (DateTime) $lastcheckDateTime
+     */
+	public function getLastCheck($pid = ''){
+		//Get folder to seek in
 
+        $lastcheckDateTime = new \DateTime();
+
+        $lastcheckPath = $pid != '' ? $this->NotificationFolder.'/'.$pid.'/lastcheck' : $this->NotificationFolder.'/lastcheck';
+
+		if(file_exists($lastcheckPath)){
+            $lastcheckTimestamp = (int) file_get_contents($lastcheckPath);
+            $lastcheckDateTime = $lastcheckDateTime->setTimestamp($lastcheckTimestamp);
+		}
+
+        return $lastcheckDateTime;
+	}
 
 
     public function testSameAsBefore($keystring, $options = array())
     {
-        $keystringHash = md5($keystring);
+		$keystringHash = md5($keystring);
         $same = false;
 
         $keepHistory = isset($options['keep_history']) ? $options['keep_history'] : false;
         $identifier = isset($options['identifier']) ? '/'.trim($options['identifier']) : '';
+
 
         if ($keepHistory) {
             $historyPath = $this->NotificationFolder.$identifier;
@@ -178,7 +198,7 @@ class FreezbiApi
 
             $filePath = $historyPath.'/'.$keystringHash;
             $same = file_exists($filePath);
-    
+
             if (!$same) {
                 file_put_contents($filePath, $keystring);
             }
