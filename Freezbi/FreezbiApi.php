@@ -165,11 +165,9 @@ class FreezbiApi
      * @return (DateTime) $lastcheckDateTime
      */
 	public function getLastCheck($pid = ''){
-		//Get folder to seek in
-
+		// Get folder to seek in
         $lastcheckDateTime = new \DateTime();
-
-        $lastcheckPath = $pid != '' ? $this->NotificationFolder.'/'.$pid.'/lastcheck' : $this->NotificationFolder.'/lastcheck';
+        $lastcheckPath = !empty($pid) ? $this->NotificationFolder.'/'.$pid.'/lastcheck' : $this->NotificationFolder.'/lastcheck';
 
 		if(file_exists($lastcheckPath)){
             $lastcheckTimestamp = (int) file_get_contents($lastcheckPath);

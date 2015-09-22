@@ -11,19 +11,22 @@ class Response
 
     public $Data;
 
-    public $isList = false;
+    public $IsList = false;
+
+    public $InvalidateSubscription = false;
 
 
-    public function __construct($title = null, $message = null, $data = null)
+    public function __construct($title = null, $message = null, $data = null, $IsList = false)
     {
         $this->Title = $title;
         $this->Message = $message;
         $this->Data = $data;
+        $this->IsList = $IsList;
     }
 
     public function render()
     {
-        $output = array('result' => $this->SendNotification, 'list' => $this->isList);
+        $output = array('result' => $this->SendNotification);
 
         if (!empty($this->Title) && $this->Title != null) {
             $output['title'] = $this->Title;
@@ -31,10 +34,15 @@ class Response
 
         if (!empty($this->Message) && $this->Message != null) {
             $output['message'] = $this->Message;
+            $output['list'] = $this->IsList;
         }
 
         if (!empty($this->Data) && $this->Data != null) {
             $output['data'] = $this->Data;
+        }
+
+        if (!empty($this->InvalidateSubscription) && $this->InvalidateSubscription != null && $this->InvalidateSubscription) {
+            $output['invalidateSubscription'] = $this->InvalidateSubscription;
         }
 
         return $output;
