@@ -18,7 +18,6 @@ under any location that will be available for including by
 
     require_once '{your-installation-dir}/Freezbi/Autoloader.php';
 
-in your project (see examples below).
 
 Installation with Composer
 -------------------------------------------------
@@ -46,7 +45,7 @@ Freezbi SDK is distributed under MIT license, see LICENSE file.
 Contacts
 -------------------------------------------------
 Report bugs or suggest features using
-[issue tracker at GitHub](https://github.com/freezbi/freezbi-php-sdk).
+[Freezbi Contact Page](http://www.freezbi.com/contact).
 
 
 Examples
