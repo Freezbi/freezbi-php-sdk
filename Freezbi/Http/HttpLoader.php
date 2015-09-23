@@ -39,6 +39,11 @@ class HttpLoader
         }
 
         $output = curl_exec($ch);
+
+        if ($output === false) {
+            throw new HttpGetException(sprintf('Error %s: %s', curl_errno($ch), curl_error($ch)));
+        }
+        
         curl_close($ch);
 
         return $output;
