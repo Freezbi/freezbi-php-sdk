@@ -15,7 +15,7 @@ class SingleStreamNotification extends Notification
     public function execute()
     {
         if ($this->Url == null) {
-            return null;
+            return '';
         }
 
         $content = HttpLoader::get($this->Url, $this->RandomAgents);

@@ -9,10 +9,10 @@ class ExecutionDateTime
     public $ExecutionTime;
 
 
-    public function __construct($Year = null, $Month = null, $Day = null, $Hour = null, $Minute = null, $Second = null)
+    public function __construct($Year = null, $Month = null, $Day = null, $Hour = null, $Minute = null, $Second = null, $Timezone = null)
     {
         $this->ExecutionDate = new ExecutionDate($Year, $Month, $Day);
-        $this->ExecutionTime = new ExecutionTime($Hour, $Minute, $Second);
+        $this->ExecutionTime = new ExecutionTime($Hour, $Minute, $Second, $Timezone);
     }
 
 
