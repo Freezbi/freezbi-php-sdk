@@ -7,6 +7,7 @@ include dirname(__FILE__).'/Autoloader.php';
 use \Freezbi\Util\StringTools;
 use \Freezbi\Util\ExecutionTime;
 use \Freezbi\Util\ExecutionDate;
+use \Freezbi\Util\ExecutionInterval;
 use \Freezbi\Response\Response;
 use \Freezbi\Notification\ManyStreamNotification;
 

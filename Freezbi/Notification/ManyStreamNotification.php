@@ -13,6 +13,8 @@ class ManyStreamNotification extends Notification
 
     public $Multiple;
 
+    public $PostDatas = null;
+
     public function __construct($name = null, $post = array(), $url = null, $format = 'html')
     {
         $this->Name = $name;
@@ -35,17 +37,22 @@ class ManyStreamNotification extends Notification
     public function execute($pid = null)
     {
         $url = null;
+        $postData = null;
 
         if ($pid != null) {
             if (isset($this->Urls[$pid])) {
                 $url = $this->Urls[$pid];
+            }
+
+            if (isset($this->PostDatas[$pid])) {
+                $postData = $this->PostDatas[$pid];
             }
         } else {
             $url = $this->Url;
         }
 
 
-        $content = HttpLoader::get($url, $this->RandomAgents);
+        $content = HttpLoader::get($url, $this->RandomAgents, $postData);
 
         switch ($this->Format) {
             case "json":

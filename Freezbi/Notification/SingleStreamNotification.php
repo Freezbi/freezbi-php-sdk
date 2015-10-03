@@ -18,7 +18,7 @@ class SingleStreamNotification extends Notification
             return '';
         }
 
-        $content = HttpLoader::get($this->Url, $this->RandomAgents);
+        $content = HttpLoader::get($this->Url, $this->RandomAgents, $this->PostData);
 
         switch ($this->Format) {
             case "json":

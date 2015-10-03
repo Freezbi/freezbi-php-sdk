@@ -13,5 +13,7 @@ abstract class Notification
 
     public $RandomAgents = true;
 
+    public $PostData = null;
+
  
 }

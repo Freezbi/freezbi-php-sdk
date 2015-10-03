@@ -2,6 +2,7 @@
 namespace Freezbi\Builder;
 
 use Freezbi\FreezbiApi;
+use Freezbi\Notification\ManyStreamNotification;
 use Freezbi\Notification\SingleStreamNotification;
 use Freezbi\Response\ResponseList;
 
@@ -22,7 +23,17 @@ class RssNotificationBuilder
 
     protected $RssReaderService;
 
+    protected $PostData;
+
     private $DateLastCheck = null;
+
+    private $Debug = false;
+
+    private $TypeStream = 0;
+
+
+    public static $FLAG_SINGLE_STREAM = 0;
+    public static $FLAG_MANY_STREAM = 1;
 
 
     public function __construct($UniqueName)
@@ -36,8 +47,12 @@ class RssNotificationBuilder
         return new RssNotificationBuilder($UniqueName);
     }
 
+    public function render() {
+        return $this->getTypeStream() == self::$FLAG_SINGLE_STREAM ? $this->renderSingleStream() : $this->renderManyStream();
+    }
 
-    public function render()
+
+    public function renderSingleStream()
     {
         $freezbiApi = new FreezbiApi();
         $freezbiApi->TemporaryFolder = $this->TemporaryFolder;
@@ -63,6 +78,58 @@ class RssNotificationBuilder
 
             foreach ($feed->getItems() as $item) {
 
+                $newElements[] = array(
+                    'title' => $item->getTitle(),
+                    'data' => $item->getLink()
+                );
+            }
+
+            if (!empty($newElements)) {
+                // Update the response with new data
+                $response->SendNotification = true;
+                $response->Title = $self->getNotificationTitle();
+                $response->Message = $newElements;
+            }
+
+            // Return the response
+            return $response;
+        };
+
+        return $freezbiApi->execute();
+    }
+
+
+    public function renderManyStream()
+    {
+        $freezbiApi = new FreezbiApi();
+        $freezbiApi->TemporaryFolder = $this->TemporaryFolder;
+
+        $notification = new ManyStreamNotification($this->UniqueName, $this->getPostData());
+        $notification->Delay = $this->Delay;
+
+        $freezbiApi->prepare($notification);
+        $this->setDateLastCheck($freezbiApi->getLastCheck());
+
+        // Save a "this" reference for the closure
+        $self = $this;
+
+        // Result processing
+        $notification->Action = function ($identifier, $configuration, $htmlContent) use ($freezbiApi, $self) {
+
+            // Prepare a response
+            $response = new ResponseList();
+            $reader = $self->getRssReaderService();
+            $newElements = array();
+
+            $rawUrl = $this->getFeedUrl();
+            $mixedUrl = preg_replace_callback('/{(.*?)[\|\|.*?]?}/', function($match) use ($configuration) {
+                $match = explode('||',$match[1]);
+                return isset($configuration[$match[0]]) ? $configuration[$match[0]] : $configuration[$match[1]] ;
+            }, $rawUrl);
+
+            $feed = $reader->getFeedContent($mixedUrl, $self->getDateLastCheck());
+
+            foreach ($feed->getItems() as $item) {
                 $newElements[] = array(
                     'title' => $item->getTitle(),
                     'data' => $item->getLink()
@@ -211,6 +278,28 @@ class RssNotificationBuilder
         return $this->RssReaderService;
     }
 
+    /**
+     * @param mixed $PostData
+     */
+    public function setPostData($PostData)
+    {
+        $this->PostData = $PostData;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPostData()
+    {
+        if (empty($this->PostData) || $this->PostData == null) {
+            return $_POST;
+        }
+
+        return $this->PostData;
+    }
+
 
     /**
      * @param null $DateLastCheck
@@ -227,7 +316,49 @@ class RssNotificationBuilder
      */
     public function getDateLastCheck()
     {
+        if ($this->getDebug()) {
+            $dateLastCheckDebug = new \DateTime();
+            $dateLastCheckDebug->setDate(2015,01,01);
+            return $dateLastCheckDebug;
+        }
+
         return $this->DateLastCheck;
+    }
+
+    /**
+     * @param boolean $Debug
+     */
+    public function setDebug($Debug)
+    {
+        $this->Debug = $Debug;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getDebug()
+    {
+        return $this->Debug;
+    }
+
+    /**
+     * @param int $TypeStream
+     */
+    public function setTypeStream($TypeStream)
+    {
+        $this->TypeStream = $TypeStream;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTypeStream()
+    {
+        return $this->TypeStream;
     }
 
 

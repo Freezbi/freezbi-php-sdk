@@ -22,7 +22,7 @@ class HttpLoader
     }
 
 
-    public static function get($url, $randomAgents = true)
+    public static function get($url, $randomAgents = true, $postData = null)
     {
         if ($url == null || $url == 'null' || $url == '') return '';
 
@@ -32,6 +32,12 @@ class HttpLoader
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_MAXREDIRS, 2); //only 2 redirects
+
+        if ($postData != null) {
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($postData));
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
+        }
 
         //  curl_setopt($ch,CURLOPT_HEADER, false);
         if ($randomAgents) {
