@@ -253,4 +253,15 @@ class FreezbiApi
     {
         fclose($this->LogFile);
     }
+
+    public function setTemporaryFolder($temporaryFolder)
+    {
+        $this->TemporaryFolder = $temporaryFolder;
+    }
+
+    public function setGlobalDelay($delay)
+    {
+        $this->Delay = $delay;
+    }
+
 }

@@ -56,10 +56,10 @@ class RssNotificationBuilder
     {
         $freezbiApi = new FreezbiApi();
         $freezbiApi->TemporaryFolder = $this->TemporaryFolder;
+        $freezbiApi->Delay = $this->Delay;
 
         $notification = new SingleStreamNotification($this->UniqueName);
-        $notification->Url = $this->FeedUrl;
-        $notification->Delay = $this->Delay;
+        $notification->setUrl($this->FeedUrl);
 
         $freezbiApi->prepare($notification);
         $this->setDateLastCheck($freezbiApi->getLastCheck());
@@ -103,9 +103,9 @@ class RssNotificationBuilder
     {
         $freezbiApi = new FreezbiApi();
         $freezbiApi->TemporaryFolder = $this->TemporaryFolder;
+        $freezbiApi->Delay = $this->Delay;
 
         $notification = new ManyStreamNotification($this->UniqueName, $this->getConfigurations());
-        $notification->Delay = $this->Delay;
 
         $freezbiApi->prepare($notification);
         $this->setDateLastCheck($freezbiApi->getLastCheck());
