@@ -85,6 +85,7 @@ class FreezbiApi
             } else {
                 $inputContent = $this->Notification->Multiple ? $this->Notification->execute($pid) : $content;
                 $response = $this->Notification->Action->__invoke($pid, $configuration, $inputContent);
+                $response->InvalidateSubscription = $this->Notification->getSpecificConfigurationInvalidation($pid);
             }
 
             if (!$response instanceof Response) {

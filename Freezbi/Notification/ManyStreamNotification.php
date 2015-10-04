@@ -15,6 +15,8 @@ class ManyStreamNotification extends Notification
 
     public $PostDatas = null;
 
+    private $InvalidateConfigurations;
+
     public function __construct($name = null, $configurations = array(), $url = null, $format = 'html')
     {
         $this->Name = $name;
@@ -24,6 +26,7 @@ class ManyStreamNotification extends Notification
         $this->Urls = array();
         $this->Delays = array();
         $this->Configurations = array();
+        $this->InvalidateConfigurations = array();
 
         if (empty($configurations)) {
             $configurations = $_POST;
@@ -64,6 +67,13 @@ class ManyStreamNotification extends Notification
     }
 
 
+    public function setNoCallPolicy() {
+        $this->Multiple = false;
+        $this->Url = '';
+
+        return $this;
+    }
+
     public function setSingleCallPolicy() {
         $this->Multiple = false;
 
@@ -76,9 +86,31 @@ class ManyStreamNotification extends Notification
         return $this;
     }
 
+    public function getConfigurations() {
+        return $this->Configurations;
+    }
 
     public function getSpecificConfiguration($pid) {
         return isset($this->Configurations[$pid]) ? $this->Configurations[$pid] : null;
+    }
+
+
+    public function ignoreSpecificConfiguration($pid) {
+        unset($this->Configurations[$pid]);
+
+        return $this;
+    }
+
+    public function invalidateSpecificConfiguration($pid) {
+        $this->InvalidateConfigurations[$pid] = true;
+
+        return $this;
+    }
+
+
+
+    public function getSpecificConfigurationInvalidation($pid) {
+        return isset($this->InvalidateConfigurations[$pid]) ? true : false;
     }
 
     public function setSpecificUrl($pid, $url) {
