@@ -56,7 +56,6 @@ class FreezbiApi
 
     public function execute()
     {
-
         // If the delay isn't elapsed, return a dummy false response
         if (!$this->delayExecutionExpired($this->Delay)) {
             $this->log("> Delay isn't over yet : ".$this->RemainingTime."s left", "\n");
@@ -68,30 +67,39 @@ class FreezbiApi
 
         // Many stream case
         if ($this->Notification instanceof ManyStreamNotification) {
-            $renders = array();
-            $content = $this->Notification->Multiple ? '' : $this->Notification->execute();
-
-            foreach ($this->Notification->Configurations as $pid => $configuration) {
-
-                if (isset($this->Notification->Delays[$pid]) && !$this->delayExecutionExpired($this->Notification->Delays[$pid],$pid)) {
-                    $response = new Response();
-                } else {
-                    $inputContent = $this->Notification->Multiple ? $this->Notification->execute($pid) : $content;
-                    $response = $this->Notification->Action->__invoke($pid, $configuration, $inputContent);
-                }
-
-                if (!$response instanceof Response) {
-                    throw new \InvalidArgumentException('Callback must return a Freezbi\\Response object.');
-                }
-
-                $renders[$pid] = $response->render();
-            }
-
-            $this->closeLog();
-            return json_encode($renders);
+            return $this->renderManyStream();
         }
 
+        return $this->renderSingleStream();
+    }
 
+
+    public function renderManyStream() {
+        $renders = array();
+        $content = $this->Notification->Multiple ? '' : $this->Notification->execute();
+
+        foreach ($this->Notification->Configurations as $pid => $configuration) {
+
+            if (isset($this->Notification->Delays[$pid]) && !$this->delayExecutionExpired($this->Notification->Delays[$pid],$pid)) {
+                $response = new Response();
+            } else {
+                $inputContent = $this->Notification->Multiple ? $this->Notification->execute($pid) : $content;
+                $response = $this->Notification->Action->__invoke($pid, $configuration, $inputContent);
+            }
+
+            if (!$response instanceof Response) {
+                throw new \InvalidArgumentException('Callback must return a Freezbi\\Response object.');
+            }
+
+            $renders[$pid] = $response->render();
+        }
+
+        $this->closeLog();
+        return json_encode($renders);
+    }
+
+
+    public function renderSingleStream() {
         // Get remote url data
         $content = $this->Notification->execute();
 
@@ -106,7 +114,6 @@ class FreezbiApi
         $this->closeLog();
         return $response->renderJson();
     }
-
 
     public function delayExecutionExpired($time, $pid = '')
     {

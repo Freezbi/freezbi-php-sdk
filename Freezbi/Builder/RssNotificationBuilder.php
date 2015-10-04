@@ -23,7 +23,7 @@ class RssNotificationBuilder
 
     protected $RssReaderService;
 
-    protected $PostData;
+    protected $Configurations;
 
     private $DateLastCheck = null;
 
@@ -104,7 +104,7 @@ class RssNotificationBuilder
         $freezbiApi = new FreezbiApi();
         $freezbiApi->TemporaryFolder = $this->TemporaryFolder;
 
-        $notification = new ManyStreamNotification($this->UniqueName, $this->getPostData());
+        $notification = new ManyStreamNotification($this->UniqueName, $this->getConfigurations());
         $notification->Delay = $this->Delay;
 
         $freezbiApi->prepare($notification);
@@ -279,11 +279,11 @@ class RssNotificationBuilder
     }
 
     /**
-     * @param mixed $PostData
+     * @param mixed $Configurations
      */
-    public function setPostData($PostData)
+    public function setConfigurations($Configurations)
     {
-        $this->PostData = $PostData;
+        $this->Configurations = $Configurations;
 
         return $this;
     }
@@ -291,13 +291,13 @@ class RssNotificationBuilder
     /**
      * @return mixed
      */
-    public function getPostData()
+    public function getConfigurations()
     {
-        if (empty($this->PostData) || $this->PostData == null) {
+        if (empty($this->Configurations) || $this->Configurations == null) {
             return $_POST;
         }
 
-        return $this->PostData;
+        return $this->Configurations;
     }
 
 

@@ -15,7 +15,7 @@ class ManyStreamNotification extends Notification
 
     public $PostDatas = null;
 
-    public function __construct($name = null, $post = array(), $url = null, $format = 'html')
+    public function __construct($name = null, $configurations = array(), $url = null, $format = 'html')
     {
         $this->Name = $name;
         $this->Url = $url;
@@ -25,11 +25,11 @@ class ManyStreamNotification extends Notification
         $this->Delays = array();
         $this->Configurations = array();
 
-        if (empty($post)) {
-            $post = $_POST;
+        if (empty($configurations)) {
+            $configurations = $_POST;
         }
-		
-        foreach ($post as $pid => $configuration) {
+
+        foreach ($configurations as $pid => $configuration) {
             $this->Configurations[$pid] = (array) json_decode($configuration);
         }
     }
@@ -63,6 +63,41 @@ class ManyStreamNotification extends Notification
         return $content;
     }
 
+
+    public function setSingleCallPolicy() {
+        $this->Multiple = false;
+
+        return $this;
+    }
+
+    public function setMultipleCallPolicy() {
+        $this->Multiple = true;
+
+        return $this;
+    }
+
+
+    public function getSpecificConfiguration($pid) {
+        return isset($this->Configurations[$pid]) ? $this->Configurations[$pid] : null;
+    }
+
+    public function setSpecificUrl($pid, $url) {
+        $this->Urls[$pid] = $url;
+
+        return $this;
+    }
+
+    public function setSpecificDelay($pid, $delay) {
+        $this->Delays[$pid] = $delay;
+
+        return $this;
+    }
+
+    public function setSpecificPostData($pid, $postData) {
+        $this->PostDatas[$pid] = $postData;
+
+        return $this;
+    }
 
 
 }
