@@ -41,6 +41,10 @@ abstract class Notification
         return $this;
     }
 
+    public function getOutputFormat() {
+        return $this->Format;
+    }
+
     public function setEnableRandomAgents() {
         $this->RandomAgents = true;
 
@@ -53,9 +57,22 @@ abstract class Notification
         return $this;
     }
 
+    public function isRandomAgentsActivated() {
+        return $this->RandomAgents;
+    }
+
     public function setPostData($postData) {
         $this->PostData = $postData;
 
         return $this;
     }
+
+    public function getPostData() {
+        return $this->PostData();
+    }
+
+    public function getUrl() {
+        return $this->Url;
+    }
+
 }

@@ -107,8 +107,6 @@ class ManyStreamNotification extends Notification
         return $this;
     }
 
-
-
     public function getSpecificConfigurationInvalidation($pid) {
         return isset($this->InvalidateConfigurations[$pid]) ? true : false;
     }
@@ -119,16 +117,28 @@ class ManyStreamNotification extends Notification
         return $this;
     }
 
+    public function getSpecificUrl($pid) {
+        return $this->Urls[$pid];
+    }
+
     public function setSpecificDelay($pid, $delay) {
         $this->Delays[$pid] = $delay;
 
         return $this;
     }
 
+    public function getSpecificDelay($pid) {
+        return $this->Delays[$pid];
+    }
+
     public function setSpecificPostData($pid, $postData) {
         $this->PostDatas[$pid] = $postData;
 
         return $this;
+    }
+
+    public function getSpecificPostData($pid) {
+        return $this->PostDatas[$pid];
     }
 
 

@@ -29,6 +29,10 @@ class FreezbiApi
 
     public $RemainingTime;
 
+    public static $FLAG_HISTORY_MODE = true;
+    public static $FLAG_SWITCH_MODE = false;
+
+
     public function __construct()
     {
     }
@@ -187,13 +191,38 @@ class FreezbiApi
 	}
 
 
+
+    public function alreadyExists($keystring, $mode = true, $initValue = '-1', $identifier = null) {
+        if ($mode == self::$FLAG_SWITCH_MODE) {
+            return $this->alreadyExistsModeSwitch($keystring, $initValue, $identifier);
+        }
+
+        return $this->alreadyExistsModeHistory($keystring, $identifier);
+    }
+
+    public function alreadyExistsModeHistory($keystring, $identifier = null) {
+        return $this->testSameAsBefore($keystring, array(
+            'keep_history' => self::$FLAG_HISTORY_MODE,
+            'identifier' => $identifier
+        ));
+    }
+
+    public function alreadyExistsModeSwitch($keystring, $initValue = '-1', $identifier = null) {
+        return $this->testSameAsBefore($keystring, array(
+            'keep_history' => self::$FLAG_SWITCH_MODE,
+            'init_value' => $initValue,
+            'identifier' => $identifier
+        ));
+    }
+
+
     public function testSameAsBefore($keystring, $options = array())
     {
 		$keystringHash = md5($keystring);
         $same = false;
 
         $keepHistory = isset($options['keep_history']) ? $options['keep_history'] : false;
-        $identifier = isset($options['identifier']) ? '/'.trim($options['identifier']) : '';
+        $identifier = isset($options['identifier']) && $options['identifier'] != null ? '/'.trim($options['identifier']) : '';
 
 
         if ($keepHistory) {
@@ -260,9 +289,24 @@ class FreezbiApi
         $this->TemporaryFolder = $temporaryFolder;
     }
 
+    public function getTemporaryFolder()
+    {
+        return $this->TemporaryFolder;
+    }
+
     public function setGlobalDelay($delay)
     {
         $this->Delay = $delay;
+    }
+
+    public function getGlobalDelay()
+    {
+        return $this->Delay;
+    }
+
+    public function getNotification()
+    {
+        return $this->Notification;
     }
 
 }
