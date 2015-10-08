@@ -1,6 +1,7 @@
 <?php
 namespace Freezbi\Builder;
 
+use Debril\RssAtomBundle\Driver\DriverUnreachableResourceException;
 use Freezbi\FreezbiApi;
 use Freezbi\Notification\ManyStreamNotification;
 use Freezbi\Notification\SingleStreamNotification;
@@ -95,7 +96,11 @@ class RssNotificationBuilder
             return $response;
         };
 
-        return $freezbiApi->execute();
+        try {
+            return $freezbiApi->execute();
+        } catch(\Debril\RssAtomBundle\Driver\DriverUnreachableResourceException $e) {
+            return $freezbiApi->renderEmptyResponseList();
+        }
     }
 
 
@@ -147,7 +152,11 @@ class RssNotificationBuilder
             return $response;
         };
 
-        return $freezbiApi->execute();
+        try {
+            return $freezbiApi->execute();
+        } catch(\Debril\RssAtomBundle\Driver\DriverUnreachableResourceException $e) {
+            return $freezbiApi->renderEmptyResponseList();
+        }
     }
 
 

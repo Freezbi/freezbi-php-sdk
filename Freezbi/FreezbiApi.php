@@ -9,6 +9,7 @@ use \Freezbi\Util\ExecutionTime;
 use \Freezbi\Util\ExecutionDate;
 use \Freezbi\Util\ExecutionInterval;
 use \Freezbi\Response\Response;
+use \Freezbi\Response\ResponseList;
 use \Freezbi\Notification\ManyStreamNotification;
 
 /**
@@ -169,6 +170,17 @@ class FreezbiApi
         }
 
         return false;
+    }
+
+
+    public function renderEmptyResponse() {
+        $badResponse = new Response();
+        return json_encode($badResponse->render());
+    }
+
+    public function renderEmptyResponseList() {
+        $badResponse = new ResponseList();
+        return json_encode($badResponse->render());
     }
 
     /*
