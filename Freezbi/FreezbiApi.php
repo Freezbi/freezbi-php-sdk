@@ -4,6 +4,7 @@ namespace Freezbi;
 include dirname(__FILE__).'/Libraries/phpQuery/phpQuery.php';
 include dirname(__FILE__).'/Autoloader.php';
 
+use Freezbi\Http\HttpGetException;
 use Freezbi\Notification\SingleStreamNotification;
 use \Freezbi\Util\StringTools;
 use \Freezbi\Util\ExecutionTime;
@@ -89,7 +90,20 @@ class FreezbiApi
             if (isset($notification->Delays[$pid]) && !$this->delayExecutionExpired($notification->Delays[$pid],$pid)) {
                 $response = new Response();
             } else {
-                $inputContent = $notification->isSingleCallPolicy() ? $content : $notification->execute($pid);
+                $inputContent = $content;
+
+                if (!$notification->isSingleCallPolicy()) {
+                    if ($notification->isCatchException()) {
+                        try {
+                            $inputContent = $notification->execute($pid);
+                        } catch (HttpGetException $e) {
+                            $notification->setSpecificException($pid, $e);
+                        }
+                    } else {
+                        $inputContent = $notification->execute($pid);
+                    }
+                }
+
                 $response = $notification->Action->__invoke($pid, $configuration, $inputContent);
                 $response->InvalidateSubscription = $notification->getSpecificConfigurationInvalidation($pid);
             }

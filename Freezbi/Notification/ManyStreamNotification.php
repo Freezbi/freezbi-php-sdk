@@ -17,9 +17,14 @@ class ManyStreamNotification extends Notification
 
     private $InvalidateConfigurations;
 
+    public $CatchException = false;
+
+    public $Exceptions;
+
     public static $FLAG_NO_CALL_POLICY = 0;
     public static $FLAG_SINGLE_CALL_POLICY = 1;
     public static $FLAG_MULTIPLE_CALL_POLICY = 2;
+
 
     public function __construct($name = null, $configurations = array(), $url = null, $format = 'html')
     {
@@ -27,6 +32,7 @@ class ManyStreamNotification extends Notification
         $this->Url = $url;
         $this->CallPolicy = self::$FLAG_MULTIPLE_CALL_POLICY;
         $this->Format = strtolower($format);
+        $this->Exceptions = array();
         $this->Urls = array();
         $this->Delays = array();
         $this->Configurations = array();
@@ -161,6 +167,45 @@ class ManyStreamNotification extends Notification
     public function getSpecificPostData($pid) {
         return $this->PostDatas[$pid];
     }
+
+    public function setSpecificException($pid, $exception) {
+        $this->Exceptions[$pid] = $exception;
+
+        return $this;
+    }
+
+    public function getSpecificException($pid) {
+        return isset($this->Exceptions[$pid]) ? $this->Exceptions[$pid] : null;
+    }
+
+    /**
+     * @param boolean $CatchException
+     */
+    public function enableCatchException()
+    {
+        $this->CatchException = true;
+
+        return $this;
+    }
+
+    /**
+     * @param boolean $CatchException
+     */
+    public function disableCatchException()
+    {
+        $this->CatchException = false;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isCatchException()
+    {
+        return $this->CatchException;
+    }
+
 
 
 }
