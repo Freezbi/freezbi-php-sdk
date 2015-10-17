@@ -11,17 +11,21 @@ class ManyStreamNotification extends Notification
 
     public $Delays;
 
-    public $Multiple;
+    public $CallPolicy;
 
     public $PostDatas = null;
 
     private $InvalidateConfigurations;
 
+    public static $FLAG_NO_CALL_POLICY = 0;
+    public static $FLAG_SINGLE_CALL_POLICY = 1;
+    public static $FLAG_MULTIPLE_CALL_POLICY = 2;
+
     public function __construct($name = null, $configurations = array(), $url = null, $format = 'html')
     {
         $this->Name = $name;
         $this->Url = $url;
-        $this->Multiple = true;
+        $this->CallPolicy = self::$FLAG_MULTIPLE_CALL_POLICY;
         $this->Format = strtolower($format);
         $this->Urls = array();
         $this->Delays = array();
@@ -68,22 +72,38 @@ class ManyStreamNotification extends Notification
 
 
     public function setNoCallPolicy() {
-        $this->Multiple = false;
+        $this->CallPolicy = self::$FLAG_NO_CALL_POLICY;
         $this->Url = '';
 
         return $this;
     }
 
     public function setSingleCallPolicy() {
-        $this->Multiple = false;
+        $this->CallPolicy = self::$FLAG_SINGLE_CALL_POLICY;
 
         return $this;
     }
 
     public function setMultipleCallPolicy() {
-        $this->Multiple = true;
+        $this->CallPolicy = self::$FLAG_MULTIPLE_CALL_POLICY;
 
         return $this;
+    }
+
+    public function isNoCallPolicy() {
+        return $this->CallPolicy == self::$FLAG_NO_CALL_POLICY;
+    }
+
+    public function isSingleCallPolicy() {
+        return $this->CallPolicy == self::$FLAG_SINGLE_CALL_POLICY;
+    }
+
+    public function isMultipleCallPolicy() {
+        return $this->CallPolicy == self::$FLAG_MULTIPLE_CALL_POLICY;
+    }
+
+    public function getCallPolicy() {
+        return $this->CallPolicy;
     }
 
     public function getConfigurations() {
@@ -93,6 +113,7 @@ class ManyStreamNotification extends Notification
     public function getSpecificConfiguration($pid) {
         return isset($this->Configurations[$pid]) ? $this->Configurations[$pid] : null;
     }
+
 
 
     public function ignoreSpecificConfiguration($pid) {

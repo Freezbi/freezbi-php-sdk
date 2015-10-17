@@ -4,6 +4,7 @@ namespace Freezbi;
 include dirname(__FILE__).'/Libraries/phpQuery/phpQuery.php';
 include dirname(__FILE__).'/Autoloader.php';
 
+use Freezbi\Notification\SingleStreamNotification;
 use \Freezbi\Util\StringTools;
 use \Freezbi\Util\ExecutionTime;
 use \Freezbi\Util\ExecutionDate;
@@ -72,25 +73,25 @@ class FreezbiApi
 
         // Many stream case
         if ($this->Notification instanceof ManyStreamNotification) {
-            return $this->renderManyStream();
+            return $this->renderManyStream($this->Notification);
         }
 
-        return $this->renderSingleStream();
+        return $this->renderSingleStream($this->Notification);
     }
 
 
-    public function renderManyStream() {
+    public function renderManyStream(ManyStreamNotification $notification) {
         $renders = array();
-        $content = $this->Notification->Multiple ? '' : $this->Notification->execute();
+        $content = $notification->isSingleCallPolicy() ? $notification->execute() : '';
 
-        foreach ($this->Notification->Configurations as $pid => $configuration) {
+        foreach ($notification->Configurations as $pid => $configuration) {
 
-            if (isset($this->Notification->Delays[$pid]) && !$this->delayExecutionExpired($this->Notification->Delays[$pid],$pid)) {
+            if (isset($notification->Delays[$pid]) && !$this->delayExecutionExpired($notification->Delays[$pid],$pid)) {
                 $response = new Response();
             } else {
-                $inputContent = $this->Notification->Multiple ? $this->Notification->execute($pid) : $content;
-                $response = $this->Notification->Action->__invoke($pid, $configuration, $inputContent);
-                $response->InvalidateSubscription = $this->Notification->getSpecificConfigurationInvalidation($pid);
+                $inputContent = $notification->isSingleCallPolicy() ? $content : $notification->execute($pid);
+                $response = $notification->Action->__invoke($pid, $configuration, $inputContent);
+                $response->InvalidateSubscription = $notification->getSpecificConfigurationInvalidation($pid);
             }
 
             if (!$response instanceof Response) {
@@ -105,12 +106,12 @@ class FreezbiApi
     }
 
 
-    public function renderSingleStream() {
+    public function renderSingleStream(SingleStreamNotification $notification) {
         // Get remote url data
-        $content = $this->Notification->execute();
+        $content = $notification->execute();
 
         // Call process on the body response
-        $response = $this->Notification->Action->__invoke($content);
+        $response = $notification->Action->__invoke($content);
 
         // Check and render the response
         if (!$response instanceof Response) {

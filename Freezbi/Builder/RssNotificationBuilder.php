@@ -32,7 +32,6 @@ class RssNotificationBuilder
 
     private $TypeStream = 0;
 
-
     public static $FLAG_SINGLE_STREAM = 0;
     public static $FLAG_MANY_STREAM = 1;
 
