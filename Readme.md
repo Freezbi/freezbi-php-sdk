@@ -4,6 +4,7 @@ Freezbi SDK is a PHP client library to work with
 [Freezbi Notification System](http://www.freezbi.com/).
 
 
+
 Installation
 -------------------------------------------------
 SDK has been written in PHP 5.4 and has no dependencies on external packages.
