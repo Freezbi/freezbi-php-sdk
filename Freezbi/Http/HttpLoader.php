@@ -21,6 +21,12 @@ class HttpLoader
         return self::$UserAgents[$random];
     }
 
+    public static function getRandomUserAgentInGivenList($userAgentsList)
+    {
+        $random = rand(0, count($userAgentsList) - 1);
+        return $userAgentsList[$random];
+    }
+
 
     public static function get($url, $randomAgents = true, $postData = null)
     {
@@ -29,6 +35,7 @@ class HttpLoader
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_MAXREDIRS, 2); //only 2 redirects
@@ -40,7 +47,9 @@ class HttpLoader
         }
 
         //  curl_setopt($ch,CURLOPT_HEADER, false);
-        if ($randomAgents) {
+        if (is_array($randomAgents)) {
+            curl_setopt($ch, CURLOPT_USERAGENT, self::getRandomUserAgentInGivenList($randomAgents));
+        } elseif ($randomAgents) {
             curl_setopt($ch, CURLOPT_USERAGENT, self::getRandomUserAgent());
         }
 

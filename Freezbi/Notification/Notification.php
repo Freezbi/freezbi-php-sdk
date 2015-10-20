@@ -57,6 +57,12 @@ abstract class Notification
         return $this;
     }
 
+    public function updateRandomAgentsList($newRandomAgentsList = array()) {
+        $this->RandomAgents = $newRandomAgentsList;
+
+        return $this;
+    }
+
     public function isRandomAgentsActivated() {
         return $this->RandomAgents;
     }

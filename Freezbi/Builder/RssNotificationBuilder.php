@@ -18,6 +18,8 @@ class RssNotificationBuilder
 
     protected $NotificationTitle;
 
+    protected $NotificationTitleFilters;
+
     protected $NotificationData;
 
     protected $TemporaryFolder;
@@ -140,10 +142,11 @@ class RssNotificationBuilder
                 );
             }
 
+
             if (!empty($newElements)) {
                 // Update the response with new data
                 $response->SendNotification = true;
-                $response->Title = $self->getNotificationTitle();
+                $response->Title = $self->getInflatedString($self->getNotificationTitle(), $configuration, $self->getNotificationTitleFilters());
                 $response->Message = $newElements;
             }
 
@@ -231,6 +234,7 @@ class RssNotificationBuilder
     {
         return $this->NotificationTitle;
     }
+
 
     /**
      * @param mixed $NotificationData
@@ -370,7 +374,50 @@ class RssNotificationBuilder
     }
 
 
+    /**
+     * @param mixed $NotificationTitleFilters
+     */
+    public function setNotificationTitleFilters($NotificationTitleFilters)
+    {
+        $this->NotificationTitleFilters = $NotificationTitleFilters;
 
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNotificationTitleFilters()
+    {
+        return $this->NotificationTitleFilters;
+    }
+
+
+    /**
+     * @return mixed
+     */
+    private function getInflatedString($str, $configuration, $filters = array())
+    {
+        $mixedStr = preg_replace_callback('/{(.*?)[\|\|.*?]?}/', function($match) use ($configuration, $filters) {
+            $match = explode('||',$match[1]);
+            $replacement = isset($configuration[$match[0]]) ? $configuration[$match[0]] : $configuration[$match[1]] ;
+
+            foreach($filters as $filter) {
+                switch($filter) {
+                    case "ucfirst":
+                        $replacement = ucfirst($replacement);
+                    break;
+                    case "strtoupper":
+                        $replacement = strtoupper($replacement);
+                    break;
+                }
+            }
+
+            return $replacement;
+        }, $str);
+
+        return $mixedStr;
+    }
 
 
 }
