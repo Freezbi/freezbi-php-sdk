@@ -275,7 +275,7 @@ class FreezbiApi
             $filePath = $historyPath.'/old_trigger_state';
 
             if (!file_exists($filePath)) {
-                file_put_contents($filePath,  isset($options['init_value']) ? $options['init_value'] : $keystringHash);
+                file_put_contents($filePath, isset($options['init_value']) && $options['init_value'] != null ? $options['init_value'] : $keystringHash);
             }
 
             $oldKeystringHash = file_get_contents($filePath);
