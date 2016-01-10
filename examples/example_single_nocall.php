@@ -9,7 +9,7 @@ $freezbiApi->TemporaryFolder = 'temp/';
 $freezbiApi->Delay = 3600 * 24; // Each remote check will be separated by 24 hours
 
 // Create a new Notification with its name, url, and body type
-$notification = new \Freezbi\Notification\SingleStreamNotification('freezbiblog');
+$notification = new \Freezbi\Notification\SingleStreamNotification('alan_turing_birthday');
 
 // Prepare the api for that SingleStreamNotification
 $freezbiApi->prepare($notification);
