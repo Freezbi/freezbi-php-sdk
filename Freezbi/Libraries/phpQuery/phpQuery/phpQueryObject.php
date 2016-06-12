@@ -3460,7 +3460,7 @@ class phpQueryObject
             : $return;
     }
     /**
-     * Dump htmlOuter and preserve chain. Usefull for debugging.
+     * Dump htmlOuter and preserve chain. Useful for debugging.
      *
      * @return phpQueryObject|QueryTemplatesSource|QueryTemplatesParse|QueryTemplatesSourceQuery
      *
@@ -3524,7 +3524,7 @@ class phpQueryObject
         return $return;
     }
     /**
-     * Dump htmlOuter and stop script execution. Usefull for debugging.
+     * Dump htmlOuter and stop script execution. Useful for debugging.
      *
      */
     public function dumpDie()

@@ -5,7 +5,7 @@
 /**
  *  mb_internal_encoding()
  *
- *  Included for mbstring pseudo-compatability.
+ *  Included for mbstring pseudo-compatibility.
  */
 if (!function_exists('mb_internal_encoding')) {
     function mb_internal_encoding($enc)
@@ -17,7 +17,7 @@ if (!function_exists('mb_internal_encoding')) {
 /**
  *  mb_regex_encoding()
  *
- *  Included for mbstring pseudo-compatability.
+ *  Included for mbstring pseudo-compatibility.
  */
 if (!function_exists('mb_regex_encoding')) {
     function mb_regex_encoding($enc)
@@ -29,7 +29,7 @@ if (!function_exists('mb_regex_encoding')) {
 /**
  *  mb_strlen()
  *
- *  Included for mbstring pseudo-compatability.
+ *  Included for mbstring pseudo-compatibility.
  */
 if (!function_exists('mb_strlen')) {
     function mb_strlen($str)
@@ -41,7 +41,7 @@ if (!function_exists('mb_strlen')) {
 /**
  *  mb_strpos()
  *
- *  Included for mbstring pseudo-compatability.
+ *  Included for mbstring pseudo-compatibility.
  */
 if (!function_exists('mb_strpos')) {
     function mb_strpos($haystack, $needle, $offset=0)
@@ -52,7 +52,7 @@ if (!function_exists('mb_strpos')) {
 /**
  *  mb_stripos()
  *
- *  Included for mbstring pseudo-compatability.
+ *  Included for mbstring pseudo-compatibility.
  */
 if (!function_exists('mb_stripos')) {
     function mb_stripos($haystack, $needle, $offset=0)
@@ -64,7 +64,7 @@ if (!function_exists('mb_stripos')) {
 /**
  *  mb_substr()
  *
- *  Included for mbstring pseudo-compatability.
+ *  Included for mbstring pseudo-compatibility.
  */
 if (!function_exists('mb_substr')) {
     function mb_substr($str, $start, $length=0)
@@ -76,7 +76,7 @@ if (!function_exists('mb_substr')) {
 /**
  *  mb_substr_count()
  *
- *  Included for mbstring pseudo-compatability.
+ *  Included for mbstring pseudo-compatibility.
  */
 if (!function_exists('mb_substr_count')) {
     function mb_substr_count($haystack, $needle)
