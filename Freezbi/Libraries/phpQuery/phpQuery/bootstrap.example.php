@@ -2,7 +2,7 @@
 /**
  * Example of phpQuery bootstrap file.
  *
- * This file is executed everytime phpQuery is included. Use it to set all
+ * This file is executed every time phpQuery is included. Use it to set all
  * your personal needs in the library.
  *
  * To activate this file, delete '.example' from filename.
