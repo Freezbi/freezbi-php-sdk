@@ -61,7 +61,7 @@ Examples
 
 Sample usage
 -------------------------------------------------
-
+```php
     // Init the Freezbi Api
     $freezbiApi = new Freezbi\FreezbiApi();
     $freezbiApi->TemporaryFolder = 'temp/';
@@ -92,3 +92,4 @@ Sample usage
     
     // Your script must return the output of the execute method
     echo $freezbiApi->execute();
+```
